@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="layout :: head"></div>
+</head>
+<body>
+<div th:replace="layout :: navigationPanel"></div>
+
+<h1>Lista książek</h1>
+<a th:href="@{/books/add}" class="btn">Dodaj nową książkę</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>Tytuł</th>
+        <th>Autor</th>
+        <th>Rok wydania</th>
+        <th>Gatunek</th>
+        <th>Cena</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.publicationYear}"></td>
+        <td th:text="${book.genre}"></td>
+        <td th:text="${book.price}"></td>
+        <td>
+            <a th:href="@{/books/edit/{id}(id=${book.id})}">Edytuj</a>
+            <a th:href="@{/books/delete/{id}(id=${book.id})}"
+               onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?')">Usuń</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:replace="layout :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuń konto</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Usuń konto</h1>
+    <p>Jesteś pewien, że chcesz usunąć swoje konto, <strong th:text="${user.name} + ' ' + ${user.surname}"></strong>?
+        Ta akcja jest nieodwracalna!</p>
+
+    <form th:action="@{/delete}" method="post">
+        <button type="submit" class="btn btn-danger">Usuń konto</button>
+        <a href="/profile" class="btn btn-secondary">Anuluj</a>
+    </form>
+</div>
+</body>
+</html>
