@@ -25,7 +25,14 @@ public class BookController {
 
     @GetMapping("/add")
     public String showAddForm(Model model) {
-        model.addAttribute("book", new Book());
+        model.addAttribute("book", new Book(
+                "Tytuł",
+                "Autor",
+                0,
+                "Gatunek",
+                0.0
+
+        ));
         return "books/form";
     }
 
