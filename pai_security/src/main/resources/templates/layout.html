@@ -37,8 +37,6 @@
         <li sec:authorize="isAuthenticated()">
             <a th:href="@{/profile}">Wyświetl swoje konto</a>
         </li>
-        <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/users}">Wyświetl użytkowników</a></li>
         <li sec:authorize="!isAuthenticated()">
             <a th:href="@{/login}">Zaloguj się</a></li>
         <li sec:authorize="isAuthenticated()">
@@ -58,7 +56,7 @@
 <div th:fragment="footer">
     <footer class="footer">
         <hr/>
-        <p>Politechnika Lubelska, wprowadzenie do Spring Boot</p>
+        <p>My own library</p>
     </footer>
 </div>
 </body>

@@ -1,12 +1,11 @@
 package bp.books.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Book {
@@ -33,6 +32,14 @@ public class Book {
     @NotNull(message = "Cena nie może być pusta")
     @Min(value = 0, message = "Cena nie może być ujemna")
     private Double price;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_books",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> users = new HashSet<>();
 
     // Constructors, Getters, Setters, toString method
     public Book() {}
@@ -92,6 +99,25 @@ public class Book {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    // Helper methods
+    public void addUser(User user) {
+        this.users.add(user);
+        user.getBooks().add(this);
+    }
+
+    public void removeUser(User user) {
+        this.users.remove(user);
+        user.getBooks().remove(this);
     }
 
     @Override

@@ -8,12 +8,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -40,7 +39,8 @@ public class UserController {
         if (binding.hasErrors()) {
             return "register";
         }
-        if (dao.findByLogin(user.getLogin()) != null) {
+        Optional<User> existingUser = dao.findByLogin(user.getLogin());
+        if (existingUser.isPresent()) {
             binding.rejectValue("login", "error.user", "Użytkownik o podanym loginie już istnieje");
             return "register";
         }
@@ -52,12 +52,12 @@ public class UserController {
 
     @GetMapping("/profile")
     public String profilePage(Model m, Principal principal) {
-        User user = dao.findByLogin(principal.getName());
-        if (user != null) {
-            m.addAttribute("user", user);
-            return "profile";
+        Optional<User> userOpt = dao.findByLogin(principal.getName());
+        if (!userOpt.isPresent()) {
+            return "redirect:/login";
         }
-        return "redirect:/login"; // Redirect to login if the user is not found
+        m.addAttribute("user", userOpt.get());
+        return "profile";
     }
 
     @GetMapping("/users")
@@ -68,34 +68,33 @@ public class UserController {
 
     @GetMapping("/edit")
     public String editPage(Model m, Principal principal) {
-        User user = dao.findByLogin(principal.getName());
-        if (user != null) {
-            m.addAttribute("user", user);
-            return "edit";
+        Optional<User> userOpt = dao.findByLogin(principal.getName());
+        if (!userOpt.isPresent()) {
+            return "redirect:/login";
         }
-        return "redirect:/login"; // Redirect to login if the user is not found
+        m.addAttribute("user", userOpt.get());
+        return "edit";
     }
 
     @PostMapping("/edit")
     public String editPagePOST(@Valid @ModelAttribute User user, BindingResult binding, Principal principal) {
-        User existingUser = dao.findByLogin(principal.getName());
-
-        if (existingUser == null) {
+        Optional<User> existingUserOpt = dao.findByLogin(principal.getName());
+        if (!existingUserOpt.isPresent()) {
             binding.rejectValue("login", "error.user", "Użytkownik nie został znaleziony");
-            return "edit"; // Return to edit form with error
+            return "edit";
         }
+        User existingUser = existingUserOpt.get();
 
         // Check if the new login is different and already exists
-        if (!existingUser.getLogin().equals(user.getLogin()) && dao.findByLogin(user.getLogin()) != null) {
+        if (!existingUser.getLogin().equals(user.getLogin()) &&
+                dao.findByLogin(user.getLogin()).isPresent()) {
             binding.rejectValue("login", "error.user", "Użytkownik o podanym loginie już istnieje");
-            return "edit"; // Return to edit form with error
+            return "edit";
         }
 
         // Update user information
         existingUser.setName(user.getName());
         existingUser.setSurname(user.getSurname());
-
-        // Only update the login if it's changed
         existingUser.setLogin(user.getLogin());
 
         // Only update the password if it's not empty
@@ -103,32 +102,27 @@ public class UserController {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        // Save changes to the database
         dao.save(existingUser);
-
-        // Redirect to the profile page after saving changes
-        return "redirect:/profile"; // Redirect to the profile page
+        return "redirect:/profile";
     }
 
     @GetMapping("/delete")
     public String deletePage(Model m, Principal principal) {
-        User user = dao.findByLogin(principal.getName());
-        if (user != null) {
-            m.addAttribute("user", user);
-            return "delete";
+        Optional<User> userOpt = dao.findByLogin(principal.getName());
+        if (!userOpt.isPresent()) {
+            return "redirect:/login";
         }
-        return "redirect:/login"; // Redirect to login if the user is not found
+        m.addAttribute("user", userOpt.get());
+        return "delete";
     }
 
     @PostMapping("/delete")
     public String deleteAccount(Principal principal) {
-        User existingUser = dao.findByLogin(principal.getName());
-
-        if (existingUser != null) {
-            dao.delete(existingUser);
+        Optional<User> existingUserOpt = dao.findByLogin(principal.getName());
+        if (existingUserOpt.isPresent()) {
+            dao.delete(existingUserOpt.get());
+            SecurityContextHolder.clearContext();
         }
-
-        SecurityContextHolder.clearContext();
-        return "redirect:/login"; // Redirect to login page after deletion
+        return "redirect:/login";
     }
 }

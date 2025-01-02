@@ -3,6 +3,8 @@ package bp.books.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Users")
@@ -26,6 +28,9 @@ public class User {
     @NotNull(message = "Hasło nie może być puste")
     @Size(min = 6, message = "Hasło musi mieć co najmniej 6 znaków")
     private String password;
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Book> books = new HashSet<>();
 
     public User() {
     }
@@ -76,5 +81,24 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(Set<Book> books) {
+        this.books = books;
+    }
+
+    // Helper methods
+    public void addBook(Book book) {
+        this.books.add(book);
+        book.getUsers().add(this);
+    }
+
+    public void removeBook(Book book) {
+        this.books.remove(book);
+        book.getUsers().remove(this);
     }
 }

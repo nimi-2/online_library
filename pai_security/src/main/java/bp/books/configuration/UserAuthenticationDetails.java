@@ -21,15 +21,14 @@ public class UserAuthenticationDetails implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = dao.findByLogin(login);
-        if (user != null) {
-            List<GrantedAuthority> grupa = new ArrayList<>();
-            grupa.add(new SimpleGrantedAuthority("normalUser"));
-            return new org.springframework.security.core.userdetails.User(user.getLogin(),
-                    user.getPassword(), true, true,
-                    true, true, grupa);
-        } else {
-            throw new UsernameNotFoundException("Zły login lub hasło.");
-        }
+        User user = dao.findByLogin(login)
+                .orElseThrow(() -> new UsernameNotFoundException("Zły login lub hasło."));
+
+        List<GrantedAuthority> grupa = new ArrayList<>();
+        grupa.add(new SimpleGrantedAuthority("normalUser"));
+        return new org.springframework.security.core.userdetails.User(user.getLogin(),
+                user.getPassword(), true, true,
+                true, true, grupa);
     }
+
 }
