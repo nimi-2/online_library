@@ -1,11 +1,67 @@
 <!DOCTYPE html>
-<html lang= "pl" xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: head"> </head>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            display: block;
+            margin: 10px 0; /* Ustawienie odstępu między przyciskami */
+            padding: 10px 20px;
+            color: white;
+            background-color: #007bff; /* Niebieski kolor */
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            width: 100%; /* Przycisk zajmuje całą szerokość kontenera */
+            max-width: 300px; /* Maksymalna szerokość przycisków */
+        }
+
+        .btn:hover {
+            background-color: #0056b3; /* Ciemniejszy niebieski na hover */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container a {
+            text-align: center;
+        }
+    </style>
+</head>
 <body>
-<div th:include="layout :: navigationPanel"></div>
-<h1 th:text="'Witaj ' +${user.name} + ' ' + ${user.surname}"></h1>
-<a th:href="@{/edit}" class="btn">Edytuj dane profilu</a>
-<a th:href="@{/delete}" class="btn">Usuń konto</a>
+<div th:replace="layout :: navigationPanel"></div>
+<div class="container">
+    <h1 th:text="'Witaj ' + ${user.name} + ' ' + ${user.surname}"></h1>
+    <a th:href="@{/edit}" class="btn">Edytuj dane profilu</a>
+    <a th:href="@{/delete}" class="btn">Usuń konto</a>
+</div>
 <div th:include="layout :: footer"></div>
 </body>
 </html>

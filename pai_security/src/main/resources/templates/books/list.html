@@ -4,78 +4,97 @@
 <head>
     <div th:replace="layout :: head"></div>
     <style>
+        .book-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .book-card {
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .book-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .book-details {
+            margin-bottom: 16px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
         .book-actions {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
+
         .btn {
             display: inline-block;
             padding: 8px 16px;
             margin: 5px;
             text-decoration: none;
             border-radius: 4px;
+            color: white;
+            background-color: #007bff;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9em;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f4f4f4;
+
+        .btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
 <div th:replace="layout :: navigationPanel"></div>
 
-<h1>Lista książek</h1>
-<a th:href="@{/books/add}" class="btn">Dodaj nową książkę</a>
+<h1> Lista książek</h1>
 
-<table>
-    <thead>
-    <tr>
-        <th>Tytuł</th>
-        <th>Autor</th>
-        <th>Rok wydania</th>
-        <th>Gatunek</th>
-        <th>Cena</th>
-        <th>Akcje</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="book : ${books}">
-        <td th:text="${book.title}"></td>
-        <td th:text="${book.author}"></td>
-        <td th:text="${book.publicationYear}"></td>
-        <td th:text="${book.genre}"></td>
-        <td th:text="${#numbers.formatDecimal(book.price, 1, 2)} + ' zł'"></td>
-        <td class="book-actions">
+<div class="book-container">
+    <div class="book-card" th:each="book : ${books}">
+        <div class="book-title" th:text="${book.title}"></div>
+        <div class="book-details">
+            <p th:text="'Autor: ' + ${book.author}"></p>
+            <p th:text="'Rok: ' + ${book.publicationYear}"></p>
+            <p th:text="'Gatunek: ' + ${book.genre}"></p>
+            <p th:text="'Cena: ' + ${#numbers.formatDecimal(book.price, 1, 2)} + ' zł'"></p>
+        </div>
+        <div class="book-actions">
             <div sec:authorize="isAuthenticated()">
                 <form th:if="${userBooks == null || !userBooks.contains(book)}"
                       th:action="@{/books/{id}/addToUser(id=${book.id})}"
                       method="post"
                       style="display: inline;">
-                    <button type="submit" class="btn">Dodaj do kolekcji</button>
+                    <button type="submit" class="btn">Dodaj</button>
                 </form>
 
                 <form th:if="${userBooks != null && userBooks.contains(book)}"
                       th:action="@{/books/{id}/removeFromUser(id=${book.id})}"
                       method="post"
                       style="display: inline;">
-                    <button type="submit" class="btn">Usuń z kolekcji</button>
+                    <button type="submit" class="btn">Usuń</button>
                 </form>
             </div>
-
-           <a th:href="@{/books/edit/{id}(id=${book.id})}" class="btn">Edytuj</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+            <a th:href="@{/books/edit/{id}(id=${book.id})}" class="btn">Edytuj</a>
+        </div>
+    </div>
+</div>
 
 <div th:replace="layout :: footer"></div>
 </body>
