@@ -78,7 +78,12 @@
         <input type="text" name="login" placeholder="Login" required/>
         <input type="password" name="passwd" placeholder="Hasło" required/>
         <button type="submit" class="button">Zaloguj się</button>
-        <button href="/register" class="button register-button">Zarejestruj się</button>
+        <button class="button register-button">
+            <a th:href="@{/register}" >
+                Zarejestruj się
+            </a>
+        </button>
+
     </form>
 
 </div>
