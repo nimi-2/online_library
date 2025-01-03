@@ -2,8 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Logowanie do systemu</title>
     <style>
         .login-container {
@@ -53,9 +52,10 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            width: 100%;
+            width: 100%; /* Ustalamy szerokość przycisku na 100% */
             transition: background-color 0.3s;
             text-align: center;
+            text-decoration: none;
         }
 
         .button:hover {
@@ -63,7 +63,17 @@
         }
 
         .register-button {
-            background-color: #4CAF50; /* Zielony kolor dla przycisku rejestracji */
+            padding: 15px 30px;
+            font-size: 16px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 85%; /* Ustalamy szerokość przycisku na 100% */
+            transition: background-color 0.3s;
+            text-align: center;
+            text-decoration: none; /* Brak podkreślenia linku */
         }
 
         .register-button:hover {
@@ -78,14 +88,8 @@
         <input type="text" name="login" placeholder="Login" required/>
         <input type="password" name="passwd" placeholder="Hasło" required/>
         <button type="submit" class="button">Zaloguj się</button>
-        <button class="button register-button">
-            <a th:href="@{/register}" >
-                Zarejestruj się
-            </a>
-        </button>
-
+        <a href="/register" class="button register-button">Zarejestruj się</a>
     </form>
-
 </div>
 </body>
 </html>
