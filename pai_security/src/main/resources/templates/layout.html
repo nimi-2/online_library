@@ -6,26 +6,46 @@
           content="width=device-width, initial-scale=1"/>
     <title>Spring login application - PL</title>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
         .footer {
             position: fixed;
             bottom: 0px;
-            left: 1px;
+            left: 0;
             height: 50px;
             width: 100%;
+            background-color: #f8f9fa;
+        }
+
+        .nav {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            background-color: #007bff; /* Niebieski kolor */
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
         }
 
         .nav > li {
-            display: inline;
-            background: limegreen;
+            padding: 14px 20px;
         }
 
-        a {
+        .nav > li:last-child {
+            margin-left: auto; /* Przesunięcie "Wyloguj się" na koniec */
+        }
+
+        .nav > li a {
             text-decoration: none;
+            color: white;
+            font-weight: bold;
         }
 
-        th, td {
-            border: solid 1px black;
-            padding: 5px;
+        .nav > li a:hover {
+            background-color: #0056b3; /* Ciemniejszy niebieski na hover */
         }
     </style>
 </head>
@@ -33,20 +53,27 @@
 <div th:fragment="navigationPanel">
     <ul class="nav">
         <li sec:authorize="!isAuthenticated()">
-            <a th:href="@{/register}">Zarejestruj się</a></li>
+            <a th:href="@{/register}">Zarejestruj się</a>
+        </li>
         <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/profile}">Profil</a></li>
+            <a th:href="@{/profile}">Profil</a>
+        </li>
         <li sec:authorize="!isAuthenticated()">
-            <a th:href="@{/login}">Zaloguj się</a></li>
+            <a th:href="@{/login}">Zaloguj się</a>
+        </li>
         <!-- Nowe przyciski dla książek -->
         <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/books}">Lista książek</a></li>
+            <a th:href="@{/books}">Lista książek</a>
+        </li>
         <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/books/add}">Dodaj książkę</a></li>
+            <a th:href="@{/books/add}">Dodaj książkę</a>
+        </li>
         <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/books/my-collection}">Moja kolekcja</a></li>
+            <a th:href="@{/books/my-collection}">Moja kolekcja</a>
+        </li>
         <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/logout}">Wyloguj się</a></li>
+            <a th:href="@{/logout}">Wyloguj się</a>
+        </li>
     </ul>
 </div>
 <div th:fragment="footer">
