@@ -1,28 +1,111 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: head"></head>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Edytuj Użytkownika</title>
+    <style>
+        .edit-form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            padding: 20px;
+        }
+
+        .edit-form-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 36px; /* Zmniejszenie rozmiaru tekstu dla formularza edycji */
+        }
+
+        .edit-form-container form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .edit-form-container input {
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #2196F3;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .edit-form-container input:focus {
+            outline: none;
+            border-color: #1976D2;
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
+        }
+
+        .edit-form-container button {
+            padding: 15px 30px;
+            font-size: 16px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        .edit-form-container button:hover {
+            background-color: #1976D2;
+        }
+
+        .error-message {
+            color: red;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 16px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        .back-button:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
 <body>
-<div th:include="layout :: navigationPanel"></div>
-<h1>Edytuj:</h1>
-<form th:action="@{/edit}" method="POST" th:object="${user}">
-    <div>
-        <input type="text" th:field="*{name}" placeholder="Imię"/>
-        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red;"></div>
-    </div>
-    <div>
-        <input type="text" th:field="*{surname}" placeholder="Nazwisko"/>
-        <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" style="color:red;"></div>
-    </div>
-    <div>
-        <input type="text" th:field="*{login}" placeholder="Login"/>
-        <div th:if="${#fields.hasErrors('login')}" th:errors="*{login}" style="color:red;"></div>
-    </div>
-    <div>
-        <input type="password" th:field="*{password}" placeholder="Hasło"/>
-        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="colorx:red;"></div>
-    </div>
-    <button type="submit">Edytuj</button>
-</form>
-<div th:include="layout :: footer"></div>
+<div class="edit-form-container">
+    <h1>Edytuj dane profilowe</h1>
+    <form th:action="@{/edit}" method="POST" th:object="${user}">
+        <div>
+            <input type="text" th:field="*{name}" placeholder="Imię"/>
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-message"></div>
+        </div>
+        <div>
+            <input type="text" th:field="*{surname}" placeholder="Nazwisko"/>
+            <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="error-message"></div>
+        </div>
+        <div>
+            <input type="text" th:field="*{login}" placeholder="Login"/>
+            <div th:if="${#fields.hasErrors('login')}" th:errors="*{login}" class="error-message"></div>
+        </div>
+        <div>
+            <input type="password" th:field="*{password}" placeholder="Hasło"/>
+            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></div>
+        </div>
+        <button type="submit">Edytuj</button>
+        <button href="/profile" class="back-button">Powrót do profilu</button>
+    </form>
+</div>
 </body>
 </html>

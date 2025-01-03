@@ -35,14 +35,9 @@
         <li sec:authorize="!isAuthenticated()">
             <a th:href="@{/register}">Zarejestruj się</a></li>
         <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/profile}">Profil</a>
-        </li>
+            <a th:href="@{/profile}">Profil</a></li>
         <li sec:authorize="!isAuthenticated()">
             <a th:href="@{/login}">Zaloguj się</a></li>
-<!--        <li sec:authorize="isAuthenticated()">-->
-<!--            <a th:href="@{/edit}">Edytuj</a></li>-->
-<!--        <li sec:authorize="isAuthenticated()">-->
-<!--            <a th:href="@{/delete}">Usuń</a></li>-->
         <!-- Nowe przyciski dla książek -->
         <li sec:authorize="isAuthenticated()">
             <a th:href="@{/books}">Lista książek</a></li>
