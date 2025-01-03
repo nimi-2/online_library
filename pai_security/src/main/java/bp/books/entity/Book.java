@@ -33,6 +33,9 @@ public class Book {
     @Min(value = 0, message = "Cena nie może być ujemna")
     private Double price;
 
+    @Column(name = "is_read", nullable = false)
+    private boolean read = false;
+
     @ManyToMany
     @JoinTable(
             name = "user_books",
@@ -41,7 +44,7 @@ public class Book {
     )
     private Set<User> users = new HashSet<>();
 
-    // Constructors, Getters, Setters, toString method
+    // Constructors
     public Book() {}
 
     public Book(String title, String author, int publicationYear, String genre, double price) {
@@ -50,12 +53,13 @@ public class Book {
         this.publicationYear = publicationYear;
         this.genre = genre;
         this.price = price;
+        this.read = false;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
-
 
     public void setId(Long id) {
         this.id = id;
@@ -101,6 +105,14 @@ public class Book {
         this.price = price;
     }
 
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
+    }
+
     public Set<User> getUsers() {
         return users;
     }
@@ -129,6 +141,7 @@ public class Book {
                 ", publicationYear=" + publicationYear +
                 ", genre='" + genre + '\'' +
                 ", price=" + price +
+                ", read=" + read +
                 '}';
     }
 }

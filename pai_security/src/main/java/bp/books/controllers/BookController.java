@@ -179,4 +179,45 @@ public class BookController {
         model.addAttribute("userBooks", user.getBooks());
         return "books/user-books";
     }
+
+    private boolean read = false;
+
+    // Dodaj gettery i settery:
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
+    }
+    @PostMapping("/{id}/toggleReadStatus")
+    public String toggleReadStatus(@PathVariable Long id, Principal principal) {
+        try {
+            Optional<User> userOpt = userDao.findByLogin(principal.getName());
+            if (!userOpt.isPresent()) {
+                throw new IllegalStateException("Nie znaleziono użytkownika");
+            }
+            User user = userOpt.get();
+
+            Optional<Book> bookOpt = bookDao.findById(id);
+            if (!bookOpt.isPresent()) {
+                throw new IllegalArgumentException("Invalid book Id:" + id);
+            }
+            Book book = bookOpt.get();
+
+            // Sprawdź, czy książka należy do użytkownika
+            if (!book.getUsers().contains(user)) {
+                throw new IllegalStateException("Książka nie należy do użytkownika");
+            }
+
+            // Zmień status przeczytania
+            book.setRead(!book.isRead());
+            bookDao.save(book);
+
+            // Przekieruj z powrotem do kolekcji użytkownika
+            return "redirect:/books/my-collection";
+        } catch (Exception e) {
+            return "redirect:/books/my-collection?error=Nie można zmienić statusu książki";
+        }
+    }
 }

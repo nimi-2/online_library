@@ -28,6 +28,19 @@
         .btn.remove:hover {
             background-color: #c82333;
         }
+        .btn.unread {
+            background-color: #ffc107;
+            color: black;
+        }
+        .btn.unread:hover {
+            background-color: #e0a800;
+        }
+        .btn.read {
+            background-color: #28a745;
+        }
+        .btn.read:hover {
+            background-color: #218838;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -74,6 +87,7 @@
             <th>Rok wydania</th>
             <th>Gatunek</th>
             <th>Cena</th>
+            <th>Status</th>
             <th>Akcje</th>
         </tr>
         </thead>
@@ -84,6 +98,16 @@
             <td th:text="${book.publicationYear}"></td>
             <td th:text="${book.genre}"></td>
             <td th:text="${#numbers.formatDecimal(book.price, 1, 2)} + ' zł'"></td>
+            <td>
+                <form th:action="@{/books/{id}/toggleReadStatus(id=${book.id})}"
+                      method="post"
+                      style="display: inline;">
+                    <button type="submit"
+                            th:class="${book.read ? 'btn read' : 'btn unread'}"
+                            th:text="${book.read ? 'Przeczytana' : 'Nieprzeczytana'}">
+                    </button>
+                </form>
+            </td>
             <td class="book-actions">
                 <form th:action="@{/books/{id}/removeFromUser(id=${book.id})}"
                       method="post"

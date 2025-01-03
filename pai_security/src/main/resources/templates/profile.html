@@ -4,6 +4,8 @@
 <body>
 <div th:include="layout :: navigationPanel"></div>
 <h1 th:text="'Witaj ' +${user.name} + ' ' + ${user.surname}"></h1>
+<a th:href="@{/edit}" class="btn">Edytuj dane profilu</a>
+<a th:href="@{/delete}" class="btn">Usuń konto</a>
 <div th:include="layout :: footer"></div>
 </body>
 </html>
