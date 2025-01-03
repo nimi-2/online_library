@@ -48,7 +48,8 @@
             <a th:href="@{/books}">Lista książek</a></li>
         <li sec:authorize="isAuthenticated()">
             <a th:href="@{/books/add}">Dodaj książkę</a></li>
-
+        <li sec:authorize="isAuthenticated()">
+            <a th:href="@{/books/my-collection}">Moja kolekcja</a></li>
         <li sec:authorize="isAuthenticated()">
             <a th:href="@{/logout}">Wyloguj się</a></li>
     </ul>

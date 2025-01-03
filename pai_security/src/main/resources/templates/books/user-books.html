@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="layout :: head"></div>
+    <style>
+        .book-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 5px;
+            text-decoration: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn.remove {
+            background-color: #dc3545;
+        }
+        .btn.remove:hover {
+            background-color: #c82333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .empty-collection {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="layout :: navigationPanel"></div>
+
+<div class="container">
+    <h1>Moja kolekcja książek</h1>
+
+    <div th:if="${userBooks.isEmpty()}" class="empty-collection">
+        <p>Twoja kolekcja jest pusta. Dodaj książki do swojej kolekcji!</p>
+        <a th:href="@{/books}" class="btn">Przeglądaj dostępne książki</a>
+    </div>
+
+    <table th:if="${!userBooks.isEmpty()}">
+        <thead>
+        <tr>
+            <th>Tytuł</th>
+            <th>Autor</th>
+            <th>Rok wydania</th>
+            <th>Gatunek</th>
+            <th>Cena</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${userBooks}">
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.publicationYear}"></td>
+            <td th:text="${book.genre}"></td>
+            <td th:text="${#numbers.formatDecimal(book.price, 1, 2)} + ' zł'"></td>
+            <td class="book-actions">
+                <form th:action="@{/books/{id}/removeFromUser(id=${book.id})}"
+                      method="post"
+                      style="display: inline;">
+                    <button type="submit" class="btn remove">Usuń z kolekcji</button>
+                </form>
+                <a th:href="@{/books/{id}/details(id=${book.id})}" class="btn">Szczegóły</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="layout :: footer"></div>
+</body>
+</html>

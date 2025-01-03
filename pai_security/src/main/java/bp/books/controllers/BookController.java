@@ -163,4 +163,20 @@ public class BookController {
             return "books/form";
         }
     }
+
+    @GetMapping("/my-collection")
+    public String showUserCollection(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        Optional<User> userOpt = userDao.findByLogin(principal.getName());
+        if (!userOpt.isPresent()) {
+            throw new IllegalStateException("Nie znaleziono użytkownika");
+        }
+
+        User user = userOpt.get();
+        model.addAttribute("userBooks", user.getBooks());
+        return "books/user-books";
+    }
 }
