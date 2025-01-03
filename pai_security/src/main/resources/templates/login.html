@@ -1,6 +1,10 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: head">
+<html lang="pl">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1"/>
+    <title>Logowanie do systemu</title>
     <style>
         .login-container {
             display: flex;
@@ -12,9 +16,10 @@
         }
 
         h1 {
-            color: #2196F3;
+            color: #000000; /* Zmieniono kolor na czarny */
             text-align: center;
             margin-bottom: 30px;
+            font-size: 48px; /* Zwiększono rozmiar tekstu */
         }
 
         .login-form {
@@ -40,7 +45,7 @@
             box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
         }
 
-        button {
+        .button {
             padding: 15px 30px;
             font-size: 16px;
             background-color: #2196F3;
@@ -50,21 +55,32 @@
             cursor: pointer;
             width: 100%;
             transition: background-color 0.3s;
+            text-align: center;
         }
 
-        button:hover {
+        .button:hover {
             background-color: #1976D2;
+        }
+
+        .register-button {
+            background-color: #4CAF50; /* Zielony kolor dla przycisku rejestracji */
+        }
+
+        .register-button:hover {
+            background-color: #45A049; /* Ciemniejszy zielony przy najechaniu */
         }
     </style>
 </head>
 <body>
 <div class="login-container">
-    <h1>Logowanie do systemu</h1>
-    <form th:action="@{/login}" method="POST" class="login-form">
+    <h1>Logowanie do biblioteki</h1>
+    <form action="/login" method="POST" class="login-form">
         <input type="text" name="login" placeholder="Login" required/>
         <input type="password" name="passwd" placeholder="Hasło" required/>
-        <button type="submit">Zaloguj się</button>
+        <button type="submit" class="button">Zaloguj się</button>
+        <button href="/register" class="button register-button">Zarejestruj się</button>
     </form>
+
 </div>
 </body>
 </html>
