@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="layout :: head"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .book-container {
             display: flex;
@@ -27,6 +28,12 @@
             font-size: 1.2em;
             font-weight: bold;
             margin-bottom: 8px;
+        }
+
+        .book-icon {
+            font-size: 8em; /* Adjust size as needed */
+            color: #007bff; /* Match your theme's color */
+            margin-bottom: 10px; /* Space between icon and details */
         }
 
         .book-details {
@@ -110,6 +117,7 @@
     <div class="book-container" th:if="${!userBooks.isEmpty()}">
         <div class="book-card" th:each="book : ${userBooks}">
             <div class="book-title" th:text="${book.title}"></div>
+            <i class="fas fa-book-open book-icon"></i> <!-- Open book icon -->
             <div class="book-details">
                 <p th:text="'Autor: ' + ${book.author}"></p>
                 <p th:text="'Rok: ' + ${book.publicationYear}"></p>

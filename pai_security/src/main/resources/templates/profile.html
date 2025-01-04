@@ -6,37 +6,53 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .main-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: #f8f9fa;
+            padding-top: 20px;
+            min-height: calc(100vh - 60px);
         }
 
         h1 {
             text-align: center;
             margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 24px;
+            color: #000;
+        }
+
+        .user-icon {
+            width: 20px;
+            height: 20px;
+            fill: #007bff;
         }
 
         .btn {
             display: block;
-            margin: 10px 0; /* Ustawienie odstępu między przyciskami */
-            padding: 10px 20px;
+            width: 100%;
+            max-width: 300px;
+            padding: 15px 30px;
+            font-size: 16px;
+            background-color: #007bff;
             color: white;
-            background-color: #007bff; /* Niebieski kolor */
-            text-decoration: none;
-            font-weight: bold;
+            border: none;
             border-radius: 5px;
             text-align: center;
-            border: none;
+            text-decoration: none;
+            margin: 10px 0;
             cursor: pointer;
-            width: 100%; /* Przycisk zajmuje całą szerokość kontenera */
-            max-width: 300px; /* Maksymalna szerokość przycisków */
+            transition: background-color 0.3s ease;
         }
 
         .btn:hover {
-            background-color: #0056b3; /* Ciemniejszy niebieski na hover */
+            background-color: #0056b3;
         }
 
         .container {
@@ -45,22 +61,22 @@
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container a {
-            text-align: center;
         }
     </style>
 </head>
 <body>
 <div th:replace="layout :: navigationPanel"></div>
-<div class="container">
-    <h1 th:text="'Witaj ' + ${user.name} + ' ' + ${user.surname}"></h1>
-    <a th:href="@{/edit}" class="btn">Edytuj dane profilu</a>
-    <a th:href="@{/delete}" class="btn">Usuń konto</a>
+<div class="main-content">
+    <h1>
+        <svg class="user-icon" viewBox="0 0 200 16">
+            <path d="M8 8c1.53 0 2.8-1.27 2.8-2.8S9.53 2.4 8 2.4 5.2 3.67 5.2 5.2 6.47 8 8 8zm0 1.4c-1.87 0-5.6.93-5.6 2.8v1.4h11.2v-1.4c0-1.87-3.73-2.8-5.6-2.8z" />
+        </svg>
+        <span th:text="'Witaj ' + ${user.name} + ' ' + ${user.surname}"></span>
+    </h1>
+    <div class="container">
+        <a th:href="@{/edit}" class="btn">Edytuj dane profilu</a>
+        <a th:href="@{/delete}" class="btn">Usuń konto</a>
+    </div>
 </div>
 <div th:include="layout :: footer"></div>
 </body>
