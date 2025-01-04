@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout :: head">
+<head>
+
+    <div th:replace="layout :: head"></div>
     <style>
         body {
             margin: 0;
@@ -31,7 +33,7 @@
         .user-icon {
             width: 20px;
             height: 20px;
-            fill: #007bff;
+            fill: #000;
         }
 
         .btn {
@@ -66,18 +68,25 @@
 </head>
 <body>
 <div th:replace="layout :: navigationPanel"></div>
+<div>
+
+</div>
 <div class="main-content">
     <h1>
-        <svg class="user-icon" viewBox="0 0 200 16">
+        <svg viewBox="0 0 16 16" height="200px" width="200px">
             <path d="M8 8c1.53 0 2.8-1.27 2.8-2.8S9.53 2.4 8 2.4 5.2 3.67 5.2 5.2 6.47 8 8 8zm0 1.4c-1.87 0-5.6.93-5.6 2.8v1.4h11.2v-1.4c0-1.87-3.73-2.8-5.6-2.8z" />
         </svg>
+    </h1>
+    <h1>
         <span th:text="'Witaj ' + ${user.name} + ' ' + ${user.surname}"></span>
     </h1>
+
     <div class="container">
         <a th:href="@{/edit}" class="btn">Edytuj dane profilu</a>
         <a th:href="@{/delete}" class="btn">Usuń konto</a>
     </div>
 </div>
+
 <div th:include="layout :: footer"></div>
 </body>
 </html>
