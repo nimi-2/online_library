@@ -3,61 +3,90 @@
 <head>
     <div th:replace="layout :: head"></div>
     <style>
+        .book-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .book-card {
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .book-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .book-details {
+            margin-bottom: 16px;
+            font-size: 0.9em;
+            color: #555;
+            width: 100%;
+        }
+
         .book-actions {
             display: flex;
+            flex-direction: column;
             gap: 10px;
+            width: 100%;
         }
+
         .btn {
-            display: inline-block;
+            display: block;
+            width: 100%;
             padding: 8px 16px;
-            margin: 5px;
+            margin: 5px 0;
             text-decoration: none;
             border-radius: 4px;
             background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
+            text-align: center;
+            font-size: 0.9em;
         }
+
         .btn:hover {
             background-color: #0056b3;
         }
+
         .btn.remove {
             background-color: #dc3545;
         }
+
         .btn.remove:hover {
             background-color: #c82333;
         }
+
         .btn.unread {
             background-color: #ffc107;
             color: black;
         }
+
         .btn.unread:hover {
             background-color: #e0a800;
         }
+
         .btn.read {
             background-color: #28a745;
         }
+
         .btn.read:hover {
             background-color: #218838;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-        }
-        tr:hover {
-            background-color: #f5f5f5;
-        }
+
         .empty-collection {
             text-align: center;
             padding: 20px;
@@ -78,46 +107,30 @@
         <a th:href="@{/books}" class="btn">Przeglądaj dostępne książki</a>
     </div>
 
-    <table th:if="${!userBooks.isEmpty()}">
-        <thead>
-        <tr>
-            <th>Tytuł</th>
-            <th>Autor</th>
-            <th>Rok wydania</th>
-            <th>Gatunek</th>
-            <th>Cena</th>
-            <th>Status</th>
-            <th>Akcje</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="book : ${userBooks}">
-            <td th:text="${book.title}"></td>
-            <td th:text="${book.author}"></td>
-            <td th:text="${book.publicationYear}"></td>
-            <td th:text="${book.genre}"></td>
-            <td th:text="${#numbers.formatDecimal(book.price, 1, 2)} + ' zł'"></td>
-            <td>
+    <div class="book-container" th:if="${!userBooks.isEmpty()}">
+        <div class="book-card" th:each="book : ${userBooks}">
+            <div class="book-title" th:text="${book.title}"></div>
+            <div class="book-details">
+                <p th:text="'Autor: ' + ${book.author}"></p>
+                <p th:text="'Rok: ' + ${book.publicationYear}"></p>
+                <p th:text="'Gatunek: ' + ${book.genre}"></p>
+                <p th:text="'Cena: ' + ${#numbers.formatDecimal(book.price, 1, 2)} + ' zł'"></p>
+            </div>
+            <div class="book-actions">
                 <form th:action="@{/books/{id}/toggleReadStatus(id=${book.id})}"
-                      method="post"
-                      style="display: inline;">
+                      method="post">
                     <button type="submit"
                             th:class="${book.read ? 'btn read' : 'btn unread'}"
                             th:text="${book.read ? 'Przeczytana' : 'Nieprzeczytana'}">
                     </button>
                 </form>
-            </td>
-            <td class="book-actions">
                 <form th:action="@{/books/{id}/removeFromUser(id=${book.id})}"
-                      method="post"
-                      style="display: inline;">
+                      method="post">
                     <button type="submit" class="btn remove">Usuń z kolekcji</button>
                 </form>
-                <a th:href="@{/books/{id}/details(id=${book.id})}" class="btn">Szczegóły</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div th:replace="layout :: footer"></div>
