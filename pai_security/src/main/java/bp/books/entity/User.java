@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Users")
@@ -29,20 +30,20 @@ public class User {
     @Size(min = 6, message = "Hasło musi mieć co najmniej 6 znaków")
     private String password;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Book> books = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserBook> userBooks = new HashSet<>();
 
     public User() {
     }
 
-    public User(String name, String surname, String login,
-                String password) {
+    public User(String name, String surname, String login, String password) {
         this.name = name;
         this.surname = surname;
         this.login = login;
         this.password = password;
     }
 
+    // Standard getters and setters
     public Integer getUserid() {
         return userid;
     }
@@ -83,22 +84,38 @@ public class User {
         this.password = password;
     }
 
+    // UserBooks relationship methods
+    public Set<UserBook> getUserBooks() {
+        return userBooks;
+    }
+
+    public void setUserBooks(Set<UserBook> userBooks) {
+        this.userBooks = userBooks;
+    }
+
+    // Helper method to get books
     public Set<Book> getBooks() {
-        return books;
+        return userBooks.stream()
+                .map(UserBook::getBook)
+                .collect(Collectors.toSet());
     }
 
-    public void setBooks(Set<Book> books) {
-        this.books = books;
-    }
-
-    // Helper methods
+    // Helper methods for managing relationships
     public void addBook(Book book) {
-        this.books.add(book);
-        book.getUsers().add(this);
+        UserBook userBook = new UserBook(this, book);
+        userBooks.add(userBook);
     }
 
     public void removeBook(Book book) {
-        this.books.remove(book);
-        book.getUsers().remove(this);
+        userBooks.removeIf(userBook -> userBook.getBook().equals(book));
+    }
+
+    // Helper method to check if a book is read by this user
+    public boolean isBookRead(Book book) {
+        return userBooks.stream()
+                .filter(userBook -> userBook.getBook().equals(book))
+                .findFirst()
+                .map(UserBook::isRead)
+                .orElse(false);
     }
 }

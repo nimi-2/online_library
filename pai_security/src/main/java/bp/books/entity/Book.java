@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Book {
@@ -43,6 +44,9 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> users = new HashSet<>();
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserBook> userBooks = new HashSet<>();
 
     // Constructors
     public Book() {}
@@ -113,9 +117,9 @@ public class Book {
         this.read = read;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
+//    public Set<User> getUsers() {
+//        return users;
+//    }
 
     public void setUsers(Set<User> users) {
         this.users = users;
@@ -131,6 +135,30 @@ public class Book {
         this.users.remove(user);
         user.getBooks().remove(this);
     }
+
+//    public void addUser(User user) {
+//        UserBook userBook = new UserBook(user, this);
+//        userBooks.add(userBook);
+//        user.getUserBooks().add(userBook);
+//    }
+
+//    public void removeUser(User user) {
+//        UserBook userBook = userBooks.stream()
+//                .filter(ub -> ub.getUser().equals(user))
+//                .findFirst()
+//                .orElse(null);
+//        if (userBook != null) {
+//            userBooks.remove(userBook);
+//            user.getUserBooks().remove(userBook);
+//        }
+//    }
+
+    public Set<User> getUsers() {
+        return userBooks.stream()
+                .map(UserBook::getUser)
+                .collect(Collectors.toSet());
+    }
+
 
     @Override
     public String toString() {

@@ -31,9 +31,9 @@
         }
 
         .book-icon {
-            font-size: 6em; /* Adjust size as needed */
-            color: #007bff; /* Match your theme's color */
-            margin-bottom: 10px; /* Space between icon and details */
+            font-size: 6em;
+            color: #007bff;
+            margin-bottom: 10px;
         }
 
         .book-details {
@@ -115,24 +115,24 @@
     </div>
 
     <div class="book-container" th:if="${!userBooks.isEmpty()}">
-        <div class="book-card" th:each="book : ${userBooks}">
-            <div class="book-title" th:text="${book.title}"></div>
-            <i class="fas fa-book-open book-icon"></i> <!-- Open book icon -->
+        <div class="book-card" th:each="userBook : ${userBooks}">
+            <div class="book-title" th:text="${userBook.book.title}"></div>
+            <i class="fas fa-book-open book-icon"></i>
             <div class="book-details">
-                <p th:text="'Autor: ' + ${book.author}"></p>
-                <p th:text="'Rok: ' + ${book.publicationYear}"></p>
-                <p th:text="'Gatunek: ' + ${book.genre}"></p>
-                <p th:text="'Cena: ' + ${#numbers.formatDecimal(book.price, 1, 2)} + ' zł'"></p>
+                <p th:text="'Autor: ' + ${userBook.book.author}"></p>
+                <p th:text="'Rok: ' + ${userBook.book.publicationYear}"></p>
+                <p th:text="'Gatunek: ' + ${userBook.book.genre}"></p>
+                <p th:text="'Cena: ' + ${#numbers.formatDecimal(userBook.book.price, 1, 2)} + ' zł'"></p>
             </div>
             <div class="book-actions">
-                <form th:action="@{/books/{id}/toggleReadStatus(id=${book.id})}"
+                <form th:action="@{/books/{id}/toggleReadStatus(id=${userBook.book.id})}"
                       method="post">
                     <button type="submit"
-                            th:class="${book.read ? 'btn read' : 'btn unread'}"
-                            th:text="${book.read ? 'Przeczytana' : 'Nieprzeczytana'}">
+                            th:class="${userBook.read ? 'btn read' : 'btn unread'}"
+                            th:text="${userBook.read ? 'Przeczytana' : 'Nieprzeczytana'}">
                     </button>
                 </form>
-                <form th:action="@{/books/{id}/removeFromUser(id=${book.id})}"
+                <form th:action="@{/books/{id}/removeFromUser(id=${userBook.book.id})}"
                       method="post">
                     <button type="submit" class="btn remove">Usuń z kolekcji</button>
                 </form>

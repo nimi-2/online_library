@@ -1,9 +1,12 @@
 package bp.books.controllers;
 
 import bp.books.dao.BookDao;
+import bp.books.dao.UserBookDao;
 import bp.books.dao.UserDao;
 import bp.books.entity.Book;
 import bp.books.entity.User;
+import bp.books.entity.UserBook;
+import bp.books.entity.UserBookId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,6 +27,9 @@ public class BookController {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private UserBookDao userBookDao;
 
     @GetMapping
     public String listBooks(Model model, Principal principal) {
@@ -176,7 +182,7 @@ public class BookController {
         }
 
         User user = userOpt.get();
-        model.addAttribute("userBooks", user.getBooks());
+        model.addAttribute("userBooks", user.getUserBooks());  // Changed from getBooks() to getUserBooks()
         return "books/user-books";
     }
 
@@ -205,19 +211,21 @@ public class BookController {
             }
             Book book = bookOpt.get();
 
-            // Sprawdź, czy książka należy do użytkownika
-            if (!book.getUsers().contains(user)) {
+            UserBookId userBookId = new UserBookId(user.getUserid(), book.getId());
+            Optional<UserBook> userBookOpt = userBookDao.findById(userBookId);
+
+            if (!userBookOpt.isPresent()) {
                 throw new IllegalStateException("Książka nie należy do użytkownika");
             }
 
-            // Zmień status przeczytania
-            book.setRead(!book.isRead());
-            bookDao.save(book);
+            UserBook userBook = userBookOpt.get();
+            userBook.setRead(!userBook.isRead());
+            userBookDao.save(userBook);
 
-            // Przekieruj z powrotem do kolekcji użytkownika
             return "redirect:/books/my-collection";
         } catch (Exception e) {
             return "redirect:/books/my-collection?error=Nie można zmienić statusu książki";
         }
     }
+
 }
