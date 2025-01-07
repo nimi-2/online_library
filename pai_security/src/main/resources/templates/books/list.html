@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <div th:replace="layout :: head"></div>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -18,6 +17,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 250px;
+            height: 450px; /* Dodana stała wysokość karty */
             padding: 16px;
             display: flex;
             flex-direction: column;
@@ -29,32 +29,43 @@
             font-size: 1.2em;
             font-weight: bold;
             margin-bottom: 8px;
+            height: 3em; /* Stała wysokość dla 2-3 linijek tekstu */
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Maksymalnie 2 linijki tekstu */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            width: 100%;
         }
 
         .book-icon {
-            font-size: 6em; /* Adjust size as needed */
-            color: #007bff; /* Match your theme's color */
-            margin-bottom: 10px; /* Space between icon and details */
+            font-size: 6em;
+            color: #007bff;
+            margin: 10px 0;
+            flex-shrink: 0; /* Zapobiega zmniejszaniu ikony */
         }
 
         .book-details {
-            margin-bottom: 16px;
+            margin: auto 0; /* Wykorzystuje dostępną przestrzeń */
             font-size: 0.9em;
             color: #555;
+            width: 100%;
+            padding: 10px 0;
         }
 
         .book-actions {
             display: flex;
-            flex-direction: column;  /* Zmiana z row na column */
+            flex-direction: column;
             gap: 10px;
-            width: 100%;  /* Dodane, aby przyciski miały pełną szerokość */
+            width: 100%;
+            margin-top: auto; /* Przyciski zawsze na dole karty */
+            padding-top: 10px;
         }
 
         .btn {
-            display: block;  /* Zmiana z inline-block na block */
-            width: 100%;    /* Dodane, aby przycisk zajmował całą szerokość */
+            display: block;
+            width: 100%;
             padding: 8px 16px;
-            margin: 5px 0;  /* Zmienione marginesy */
+            margin: 5px 0;
             text-decoration: none;
             border-radius: 4px;
             color: white;
@@ -65,10 +76,10 @@
         }
 
         .btn2 {
-            display: block;  /* Zmiana z inline-block na block */
-            width: 86%;    /* Dodane, aby przycisk zajmował całą szerokość */
+            display: block;
+            width: 86%;
             padding: 8px 16px;
-            margin: 5px 0;  /* Zmienione marginesy */
+            margin: 5px 0;
             text-decoration: none;
             border-radius: 4px;
             color: white;
@@ -78,20 +89,24 @@
             font-size: 0.9em;
         }
 
-        .btn:hover {
+        .btn:hover, .btn2:hover {
             background-color: #0056b3;
+        }
+
+        .book-details p {
+            margin: 8px 0;
         }
     </style>
 </head>
 <body>
 <div th:replace="layout :: navigationPanel"></div>
 
-<h1>  Lista książek</h1>
+<h1>Lista książek</h1>
 
 <div class="book-container">
     <div class="book-card" th:each="book : ${books}">
         <div class="book-title" th:text="${book.title}"></div>
-        <i class="fas fa-book-open book-icon"></i> <!-- Open book icon -->
+        <i class="fas fa-book-open book-icon"></i>
         <div class="book-details">
             <p th:text="'Autor: ' + ${book.author}"></p>
             <p th:text="'Rok: ' + ${book.publicationYear}"></p>

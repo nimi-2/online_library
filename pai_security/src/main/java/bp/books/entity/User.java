@@ -2,6 +2,7 @@ package bp.books.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,10 +17,14 @@ public class User {
 
     @NotNull(message = "Imię nie może być puste")
     @Size(min = 2, max = 30, message = "Imię musi mieć od 2 do 30 znaków")
+    @Pattern(regexp = "^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*$",
+            message = "Imię musi zaczynać się wielką literą i zawierać tylko litery")
     private String name;
 
     @NotNull(message = "Nazwisko nie może być puste")
     @Size(min = 2, max = 30, message = "Nazwisko musi mieć od 2 do 30 znaków")
+    @Pattern(regexp = "^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*$",
+            message = "Nazwisko musi zaczynać się wielką literą i zawierać tylko litery")
     private String surname;
 
     @NotNull(message = "Login nie może być pusty")

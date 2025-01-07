@@ -17,6 +17,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 250px;
+            height: 450px; /* Stała wysokość karty */
             padding: 16px;
             display: flex;
             flex-direction: column;
@@ -28,19 +29,31 @@
             font-size: 1.2em;
             font-weight: bold;
             margin-bottom: 8px;
+            height: 3em; /* Stała wysokość dla 2-3 linijek tekstu */
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Maksymalnie 2 linijki tekstu */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            width: 100%;
         }
 
         .book-icon {
             font-size: 6em;
             color: #007bff;
-            margin-bottom: 10px;
+            margin: 10px 0;
+            flex-shrink: 0; /* Zapobiega zmniejszaniu ikony */
         }
 
         .book-details {
-            margin-bottom: 16px;
+            margin: auto 0; /* Wykorzystuje dostępną przestrzeń */
             font-size: 0.9em;
             color: #555;
             width: 100%;
+            padding: 10px 0;
+        }
+
+        .book-details p {
+            margin: 8px 0;
         }
 
         .book-actions {
@@ -48,6 +61,8 @@
             flex-direction: column;
             gap: 10px;
             width: 100%;
+            margin-top: auto; /* Przyciski zawsze na dole karty */
+            padding-top: 10px;
         }
 
         .btn {

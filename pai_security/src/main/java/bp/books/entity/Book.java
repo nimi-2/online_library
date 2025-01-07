@@ -1,9 +1,7 @@
 package bp.books.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,23 +13,28 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Tytuł nie może być pusty")
-    @Size(min = 1, max = 100, message = "Tytuł musi mieć od 1 do 100 znaków")
+    @NotBlank(message = "Tytuł nie może być pusty")
+    @Size(min = 2, max = 100, message = "Tytuł musi mieć od 2 do 100 znaków")
     private String title;
 
-    @NotNull(message = "Autor nie może być pusty")
-    @Size(min = 1, max = 100, message = "Autor musi mieć od 1 do 100 znaków")
+    @NotBlank(message = "Autor nie może być pusty")
+    @Size(min = 2, max = 100, message = "Autor musi mieć od 2 do 100 znaków")
+    @Pattern(regexp = "^[\\p{L}\\s.'-]+$", message = "Autor może zawierać tylko litery, spacje, kropki, apostrofy i myślniki")
     private String author;
 
     @NotNull(message = "Rok wydania nie może być pusty")
     @Min(value = 1000, message = "Rok wydania musi być większy niż 1000")
+    @Max(value = 2100, message = "Rok wydania nie może być większy niż 2100")
     private Integer publicationYear;
 
-    @Size(max = 50, message = "Gatunek nie może być dłuższy niż 50 znaków")
+    @Pattern(regexp = "^[\\p{L}\\s-]*$", message = "Gatunek może zawierać tylko litery, spacje i myślniki")
+    @Size(min = 2, max = 50, message = "Gatunek musi mieć od 2 do 50 znaków")
     private String genre;
 
     @NotNull(message = "Cena nie może być pusta")
-    @Min(value = 0, message = "Cena nie może być ujemna")
+    @DecimalMin(value = "0.01", message = "Cena musi być większa niż 0")
+    @DecimalMax(value = "99999.99", message = "Cena nie może być większa niż 99999.99")
+    @Digits(integer = 5, fraction = 2, message = "Cena może mieć maksymalnie 5 cyfr przed przecinkiem i 2 po przecinku")
     private Double price;
 
     @Column(name = "is_read", nullable = false)
